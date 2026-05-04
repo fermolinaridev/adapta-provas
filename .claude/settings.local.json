@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gcc --version)",
+      "PowerShell(gcc --version)"
+    ]
+  }
+}

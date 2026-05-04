@@ -1,0 +1,58 @@
+# =====================================================================
+# ARQUIVO DE EXEMPLO DE PROVA - AdaptaProvas
+#
+# Formato: INI simplificado.
+#   - Linhas iniciadas por '#' sao comentarios e sao ignoradas.
+#   - Secao [PROVA] traz metadados (titulo, disciplina).
+#   - Cada secao [QUESTAO] descreve uma questao (numero, tipo,
+#     dificuldade, enunciado e alternativas A=, B=, C=, D=, E=).
+#
+# Tipos suportados: objetiva | discursiva
+# Dificuldade: 1 (mais facil) a 5 (mais dificil)
+# =====================================================================
+
+[PROVA]
+titulo=Prova de Ciencias - Capitulo 4
+disciplina=Biologia
+
+[QUESTAO]
+numero=1
+tipo=objetiva
+dificuldade=2
+enunciado=Considerando o texto apresentado anteriormente, identifique qual das alternativas a seguir representa, de maneira mais adequada, o principal gas utilizado pelas plantas no processo de fotossintese.
+A=Oxigenio
+B=Gas carbonico
+C=Nitrogenio
+D=Hidrogenio
+
+[QUESTAO]
+numero=2
+tipo=objetiva
+dificuldade=3
+enunciado=Tendo em vista o conteudo discutido em sala, verifique qual orgao do corpo humano e responsavel por bombear o sangue para todas as partes do corpo.
+A=Pulmao
+B=Estomago
+C=Coracao
+D=Figado
+
+[QUESTAO]
+numero=3
+tipo=discursiva
+dificuldade=4
+enunciado=Disserte, de maneira detalhada e levando em consideracao os fatores ambientais que podem influenciar a sua eficiencia, sobre o processo de fotossintese realizado pelas plantas verdes.
+
+[QUESTAO]
+numero=4
+tipo=objetiva
+dificuldade=1
+enunciado=Marque a alternativa que indica o nome do animal que vive na agua e respira por branquias.
+A=Cachorro
+B=Peixe
+C=Cavalo
+D=Passaro
+
+[QUESTAO]
+numero=5
+tipo=discursiva
+dificuldade=5
+enunciado=Levando em consideracao tudo o que foi exposto, explique de forma completa e detalhada as diferencas entre celulas eucariontes e celulas procariontes, citando exemplos concretos de cada tipo.
