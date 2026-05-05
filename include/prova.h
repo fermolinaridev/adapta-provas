@@ -61,4 +61,10 @@ int prova_carregar_arquivo(Prova *p, const char *caminho);
 /* Imprime a prova em 'out' em formato leve (sem decoracoes de perfil). */
 void prova_exibir(const Prova *p, FILE *out);
 
+/* Serializa a prova de volta para o formato INI (mesmo formato que
+ * prova_carregar_arquivo aceita). Util para o usuario salvar uma prova
+ * digitada interativamente e poder recarrega-la depois.
+ * Retorna 1 em sucesso, 0 em erro. */
+int prova_salvar_arquivo_ini(const Prova *p, const char *caminho);
+
 #endif /* PROVA_H */

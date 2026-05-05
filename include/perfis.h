@@ -23,9 +23,21 @@ typedef enum {
     PERFIL_TEA,
     PERFIL_DOWN,
     PERFIL_DI_LEVE,
+    PERFIL_DISLEXIA,
     PERFIL_GENERICO,
     PERFIL_TOTAL  /* sentinela: numero de perfis */
 } TipoPerfil;
+
+/* Grau de adaptacao aplicado sobre um perfil base.
+ *   1 = leve     (ajuste minimo, mais proximo da prova original)
+ *   2 = leve a moderado
+ *   3 = moderado (valor padrao da tabela)
+ *   4 = moderado a severo
+ *   5 = extremo  (todas as adaptacoes ligadas, frases minimas, tempo dobrado)
+ */
+#define GRAU_MIN 1
+#define GRAU_MAX 5
+#define GRAU_PADRAO 3
 
 typedef struct {
     TipoPerfil  tipo;
@@ -47,16 +59,30 @@ typedef struct {
     int    max_palavras_frase;  /* limite que dispara a quebra em virgulas  */
     int    tempo_base_minutos;  /* base de tempo por questao objetiva       */
     double fator_tempo_extra;   /* multiplicador final do tempo sugerido    */
+
+    /* Grau efetivo (1-5). Os valores acima representam o GRAU_PADRAO; o
+     * grau e ajustado em runtime por perfis_compor(). */
+    int grau;
 } Perfil;
 
-/* Devolve ponteiro para o perfil de um dado tipo, ou NULL se invalido. */
+/* Devolve ponteiro para o perfil BASE de um dado tipo (grau padrao = 3).
+ * Retorna NULL se 'tipo' for invalido. */
 const Perfil *perfis_obter(TipoPerfil tipo);
 
 /* Lista todos os perfis disponiveis em 'out', um por linha, numerados. */
 void perfis_listar(FILE *out);
 
-/* Cria uma NOVA prova adaptada a partir da original e do perfil.
- * O caller e responsavel por chamar prova_destruir() no resultado. */
+/* Devolve uma descricao curta do grau (ex.: "leve", "moderado", "extremo"). */
+const char *perfis_descricao_grau(int grau);
+
+/* Compoe um perfil base com um grau (1-5) e devolve uma struct Perfil
+ * AJUSTADA. Em graus baixos algumas adaptacoes sao desligadas; em graus
+ * altos os parametros se intensificam (frases mais curtas, mais tempo,
+ * uma questao por tela, etc). Grau fora de [1,5] e clampado. */
+Perfil perfis_compor(const Perfil *base, int grau);
+
+/* Cria uma NOVA prova adaptada a partir da original e do perfil
+ * (ja composto com grau). O caller chama prova_destruir() no resultado. */
 Prova *adaptar_prova(const Prova *original, const Perfil *perfil);
 
 /* Imprime a prova ja adaptada com decoracoes apropriadas ao perfil

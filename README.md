@@ -2,8 +2,17 @@
 
 **AdaptaProvas** é um aplicativo CLI escrito em **C (C99)** que adapta provas
 educacionais para estudantes com diferentes perfis de acessibilidade — TDAH,
-TEA, Síndrome de Down, deficiência intelectual leve e um perfil genérico
-customizável.
+TEA, Síndrome de Down, deficiência intelectual leve, **dislexia** e um perfil
+genérico customizável. Cada perfil pode ainda ser escalonado em **5 graus**
+(1 = leve, 5 = extremo), o que ajusta automaticamente a intensidade das
+adaptações.
+
+A prova pode ser fornecida de **três formas diferentes** (vide menu):
+1. **Carregar de arquivo `.txt`** já no formato INI do programa.
+2. **Digitar interativamente**, passo a passo (título → questão por questão).
+3. **Colar texto livre** (copiado de PDF/Word) — o programa detecta
+   automaticamente os números de questão (`1.`, `2)`, `Questao 3:`, `Q4)`)
+   e as alternativas (`a)`, `(b)`, `C.`).
 
 > Projeto educacional, sem dependências externas além da biblioteca padrão de
 > C. Compila com `gcc` (Linux, macOS, Windows/MinGW).
@@ -17,6 +26,7 @@ customizável.
 - [Formato do arquivo de entrada](#formato-do-arquivo-de-entrada)
 - [Arquitetura do sistema](#arquitetura-do-sistema)
 - [Regras de adaptação por perfil](#regras-de-adaptação-por-perfil)
+- [Sistema de graus (1–5)](#sistema-de-graus-1-5)
 - [Exemplos](#exemplos)
 - [Como adicionar um novo perfil](#como-adicionar-um-novo-perfil)
 - [Limitações conhecidas](#limitações-conhecidas)
@@ -30,19 +40,25 @@ Pré-requisito: `gcc` (ou `clang`) e `make`.
 ```bash
 make            # compila -> ./adapta_provas (ou adapta_provas.exe no Windows)
 make run        # compila e executa
+make exemplo    # gera as 4 saídas de exemplo automaticamente
 make clean      # remove binário e objetos
 ```
 
 Compilação manual (sem `make`):
 
 ```bash
-gcc -std=c99 -Wall -Wextra -O2 -Iinclude \
+gcc -std=c99 -Wall -Wextra -Wpedantic -O2 -Iinclude \
     src/main.c src/prova.c src/perfis.c src/utils.c \
     -o adapta_provas
 ```
 
-> **Nota Windows**: instale o `gcc` via MSYS2/MinGW. No PowerShell sem
-> compilador instalado, o build falha. Recomendado usar `Git Bash` + MinGW.
+> **Nota Windows**: instale o `gcc` via MinGW. Caminho mais rápido (testado
+> neste projeto):
+> ```powershell
+> winget install --id BrechtSanders.WinLibs.POSIX.UCRT -e
+> ```
+> Após instalar, abra um novo terminal e o `gcc 16.x` estará disponível
+> globalmente. Também é possível usar MSYS2 (`pacman -S mingw-w64-x86_64-gcc`).
 
 ---
 
@@ -58,22 +74,97 @@ $ ./adapta_provas
 PROVA  : (nenhuma carregada)
 PERFIL : (nenhum selecionado)
 ----------------------------------------------------------------------
+ --- entrada ---
  1) Carregar prova de arquivo .txt
- 2) Escolher perfil de acessibilidade
- 3) Visualizar prova original
- 4) Visualizar prova adaptada
- 5) Exportar prova adaptada para arquivo .txt
- 6) Listar perfis disponiveis
+ 2) Digitar uma nova prova (interativo, passo a passo)
+ 3) Colar prova de texto livre (de PDF/Word)
+ --- adaptacao ---
+ 4) Escolher perfil de acessibilidade + grau
+ 5) Visualizar prova original
+ 6) Visualizar prova adaptada
+ --- saida ---
+ 7) Exportar prova adaptada para .txt
+ 8) Salvar prova original em .txt (formato editavel)
+ 9) Listar perfis disponiveis
  0) Sair
 Opcao:
 ```
 
-Fluxo típico:
+### Fluxos típicos
 
-1. **Opção 1** → digite `exemplos/prova_exemplo.txt`.
-2. **Opção 2** → escolha um perfil (ex.: `1` para TDAH).
-3. **Opção 4** → veja a prova adaptada na tela.
-4. **Opção 5** → exporte para um novo `.txt`.
+**(A) Você tem um arquivo `.txt` no formato INI** — opção 1, indique o caminho.
+
+**(B) Você quer digitar a prova do zero, no terminal** — opção 2. O programa
+te pergunta título, disciplina e cada questão (tipo, enunciado, dificuldade,
+alternativas). Ao final, você pode salvar em `.txt` para reutilizar depois.
+
+**(C) Você tem a prova em PDF ou Word** — opção 3. Copie o texto da prova
+no Acrobat/Word com Ctrl+A, Ctrl+C e cole no terminal. Termine com `FIM`
+em uma linha sozinha. O programa detecta automaticamente questões e
+alternativas. Veja a [seção sobre PDF/Word](#provas-em-pdf-ou-word) abaixo.
+
+Depois de carregar a prova:
+- **Opção 4** → escolha o perfil (TDAH, TEA, Down, DI Leve, Dislexia,
+  Genérico) e em seguida o **grau** (1 a 5; ENTER usa o padrão = 3).
+- **Opção 6** → visualize a prova adaptada na tela.
+- **Opção 7** → exporte para um `.txt` para imprimir/enviar ao aluno.
+
+---
+
+## Provas em PDF ou Word
+
+O programa em si **não lê PDF ou .docx diretamente** — fazer isso em C
+puro exigiria bibliotecas externas (Poppler/MuPDF para PDF, parser de
+ZIP+XML para .docx). Em vez disso, o fluxo recomendado é:
+
+### Para Word (.docx)
+
+1. Abra o arquivo no Microsoft Word ou LibreOffice.
+2. Ctrl+A para selecionar tudo, Ctrl+C para copiar.
+3. No AdaptaProvas, escolha **opção 3 (Colar prova de texto livre)**.
+4. Cole no terminal (Ctrl+Shift+V no Linux/macOS, botão direito → colar
+   no Windows).
+5. Digite `FIM` em uma linha sozinha e pressione Enter.
+
+### Para PDF
+
+Se o PDF tem texto selecionável (não é só imagem):
+
+1. Abra no Adobe Acrobat / navegador.
+2. Selecione o texto, Ctrl+C, e cole no AdaptaProvas (opção 3).
+
+Se preferir extrair o texto antes:
+
+```bash
+# Linux/macOS (poppler-utils):
+pdftotext minha_prova.pdf minha_prova.txt
+cat minha_prova.txt | ./adapta_provas    # ou copie/cole opção 3
+```
+
+```powershell
+# Windows: instale o poppler via winget
+winget install oschwartz10612.Poppler
+pdftotext minha_prova.pdf minha_prova.txt
+```
+
+### O que o parser entende
+
+| Padrão da entrada                        | Interpretação                |
+|------------------------------------------|------------------------------|
+| `1.` `2)` `3-` `4:` (no início da linha) | Número da questão            |
+| `Q1)` `Quest 2.` `Questao 3:`            | Número da questão (com prefixo) |
+| `Pergunta 4-` `Pergunta 5:`              | Número da questão            |
+| `a)` `b)` `c)` `d)` (após `<espaço>`)    | Alternativa                  |
+| `(a)` `(b)` `(c)`                        | Alternativa                  |
+| `A.` `B.` `C.`                           | Alternativa                  |
+| Linhas que não casam com nada acima      | Continuação do enunciado/alternativa anterior |
+
+Após colar, o programa pergunta se você quer atribuir dificuldade
+(1–5) a cada questão — **isto melhora a adaptação** porque é o que
+permite reordenação e cálculo de tempo proporcional.
+
+Questões sem alternativas são automaticamente marcadas como
+**discursivas**.
 
 ---
 
@@ -134,9 +225,11 @@ adapta-provas/
 │   ├── perfis.c       # tabela de perfis + pipeline de adaptacao
 │   └── utils.c        # funcoes auxiliares de string
 ├── exemplos/
-│   ├── prova_exemplo.txt   # entrada de exemplo
-│   ├── saida_tdah.txt      # saida adaptada (perfil TDAH)
-│   └── saida_tea.txt       # saida adaptada (perfil TEA)
+│   ├── prova_exemplo.txt        # entrada de exemplo
+│   ├── saida_tdah.txt           # saida (TDAH grau 3)
+│   ├── saida_tea.txt            # saida (TEA grau 3)
+│   ├── saida_dislexia.txt       # saida (Dislexia grau 3)
+│   └── saida_tdah_grau5.txt     # saida (TDAH grau 5 - extremo)
 ├── Makefile
 └── README.md
 ```
@@ -215,20 +308,23 @@ typedef struct {
 
 ## Regras de adaptação por perfil
 
-| Bandeira / Parâmetro    | TDAH | TEA | Down | DI Leve | Genérico |
-|-------------------------|:----:|:---:|:----:|:-------:|:--------:|
-| Simplificar linguagem   | ✓    | ✓   | ✓    | ✓       | ✓        |
-| Linguagem literal       |      | ✓   | ✓    | ✓       |          |
-| Dividir frases longas   | ✓    | ✓   | ✓    | ✓       | ✓        |
-| Destacar verbos         | ✓    | ✓   | ✓    | ✓       | ✓        |
-| Sugerir tempo           | ✓    | ✓   | ✓    | ✓       | ✓        |
-| Reordenar por dificuld. | ✓    |     | ✓    | ✓       |          |
-| Uma questão por tela    | ✓    |     | ✓    |         |          |
-| Reduzir distrações      | ✓    | ✓   | ✓    | ✓       | ✓        |
-| Adicionar dicas         | ✓    |     | ✓    | ✓       | ✓        |
-| Máx. palavras p/ quebra | 18   | 22  | 12   | 14      | 20       |
-| Tempo base (min)        | 4    | 5   | 6    | 5       | 4        |
-| Fator de tempo extra    | 1.5× | 1.5×| 2.0× | 1.75×   | 1.25×    |
+Os valores abaixo correspondem ao **grau 3 (moderado)**. Outros graus
+ajustam estes números automaticamente — ver seção seguinte.
+
+| Bandeira / Parâmetro    | TDAH | TEA  | Down | DI Leve | Dislexia | Genérico |
+|-------------------------|:----:|:----:|:----:|:-------:|:--------:|:--------:|
+| Simplificar linguagem   | ✓    | ✓    | ✓    | ✓       | ✓        | ✓        |
+| Linguagem literal       |      | ✓    | ✓    | ✓       |          |          |
+| Dividir frases longas   | ✓    | ✓    | ✓    | ✓       | ✓        | ✓        |
+| Destacar verbos         | ✓    | ✓    | ✓    | ✓       | ✓        | ✓        |
+| Sugerir tempo           | ✓    | ✓    | ✓    | ✓       | ✓        | ✓        |
+| Reordenar por dificuld. | ✓    |      | ✓    | ✓       |          |          |
+| Uma questão por tela    | ✓    |      | ✓    |         |          |          |
+| Reduzir distrações      | ✓    | ✓    | ✓    | ✓       | ✓        | ✓        |
+| Adicionar dicas         | ✓    |      | ✓    | ✓       | ✓        | ✓        |
+| Máx. palavras p/ quebra | 18   | 22   | 12   | 14      | 15       | 20       |
+| Tempo base (min)        | 4    | 5    | 6    | 5       | 5        | 4        |
+| Fator de tempo extra    | 1.5× | 1.5× | 2.0× | 1.75×   | 1.75×    | 1.25×    |
 
 ### Justificativa das escolhas
 
@@ -247,7 +343,45 @@ typedef struct {
   para começar pelas mais simples.
 - **DI leve** — similar ao Down, mas com frases um pouco mais longas e
   menos tempo extra; mantemos dicas e exemplos concretos.
+- **Dislexia** — *o tempo extra é o ajuste mais importante* (decodificação
+  de palavras é mais lenta). Frases curtas, vocabulário simples e dicas
+  visuais ajudam. Mantemos a ordem original para evitar reorientação extra.
+  Linguagem literal fica desligada pois normalmente não há prejuízo de
+  compreensão semântica.
 - **Genérico** — combinação moderada para casos não especificados.
+
+---
+
+## Sistema de graus (1–5)
+
+Cada perfil pode ser aplicado em 5 graus de intensidade. O grau ajusta
+automaticamente os parâmetros sem alterar a tabela base:
+
+| Grau | Nome              | Efeito sobre o perfil base                                 |
+|:----:|-------------------|------------------------------------------------------------|
+| 1    | leve              | Desliga divisão de frases, "uma por tela", reordenação e dicas; +10 palavras no limite; -0,30 no fator de tempo. |
+| 2    | leve a moderado   | Desliga "uma por tela"; +5 palavras no limite; -0,15 no fator de tempo. |
+| 3    | moderado          | **Padrão** — usa exatamente os valores da tabela acima.    |
+| 4    | moderado a severo | -3 palavras no limite; +0,25 no fator de tempo; força dicas. |
+| 5    | extremo           | Liga **todas** as bandeiras; -6 palavras no limite (mín. 6); +0,50 no fator de tempo. |
+
+> O fator de tempo nunca cai abaixo de 1,00× e o limite de palavras nunca
+> cai abaixo de 6 — ambos clampados em `perfis_compor()`.
+
+### Exemplo prático: TDAH em grau 3 vs grau 5
+
+Para o mesmo aluno, em momentos diferentes:
+
+| Métrica                    | TDAH grau 3 | TDAH grau 5         |
+|----------------------------|:-----------:|:-------------------:|
+| Tempo total sugerido       | 58 min      | **76 min** (+31%)   |
+| Limite de palavras p/quebra| 18          | **12**              |
+| Linguagem literal          | desligada   | **ligada**          |
+| Q3 e Q5 quebradas em linhas| não         | **sim**             |
+
+Veja [exemplos/saida_tdah.txt](exemplos/saida_tdah.txt) e
+[exemplos/saida_tdah_grau5.txt](exemplos/saida_tdah_grau5.txt) para
+comparar lado a lado.
 
 ---
 
@@ -265,7 +399,19 @@ das alternativas a seguir representa, de maneira mais adequada, o principal
 gas utilizado pelas plantas no processo de fotossintese.
 ```
 
-### Saída — perfil **TDAH** (extraída de [exemplos/saida_tdah.txt](exemplos/saida_tdah.txt))
+### Quatro saídas geradas pelo `make exemplo`
+
+Cada arquivo abaixo é gerado *pelo binário compilado*, a partir do mesmo
+[`prova_exemplo.txt`](exemplos/prova_exemplo.txt):
+
+| Arquivo                                                          | Perfil    | Grau            | Tempo total |
+|------------------------------------------------------------------|-----------|-----------------|:-----------:|
+| [`saida_tdah.txt`](exemplos/saida_tdah.txt)                      | TDAH      | 3 — moderado    | 58 min      |
+| [`saida_tea.txt`](exemplos/saida_tea.txt)                        | TEA       | 3 — moderado    | 69 min      |
+| [`saida_dislexia.txt`](exemplos/saida_dislexia.txt)              | Dislexia  | 3 — moderado    | 80 min      |
+| [`saida_tdah_grau5.txt`](exemplos/saida_tdah_grau5.txt)          | TDAH      | 5 — **extremo** | 76 min      |
+
+#### Saída — perfil **TDAH** (grau 3)
 
 ```
 QUESTAO 1 [OBJETIVA] - dificuldade 2/5
@@ -282,31 +428,39 @@ o principal gas utilizado pelas plantas no processo de fotossintese.
   >> DICA: identifique primeiro O QUE a questao pede (palavra em CAIXA-ALTA)
 ```
 
-> Note: removeu o enchimento "Considerando o texto apresentado anteriormente,",
-> trocou "identifique" por "ENCONTRE" (verbo destacado), trocou
-> "de maneira mais adequada" por "do jeito certo", e adicionou tempo + dica.
+> Removeu "Considerando o texto apresentado anteriormente,", trocou
+> "identifique" por **ENCONTRE** (verbo destacado), trocou "de maneira mais
+> adequada" por "do jeito certo", adicionou tempo + dica.
 
-### Saída — perfil **TEA** (extraída de [exemplos/saida_tea.txt](exemplos/saida_tea.txt))
+#### Saída — perfil **Dislexia** (grau 3)
 
 ```
-QUESTAO 1 [OBJETIVA] - dificuldade 2/5
-Tempo sugerido: 9 minutos
+QUESTAO 3 [DISCURSIVA] - dificuldade 4/5
+Tempo sugerido: 23 minutos
 
-ENCONTRE qual das alternativas a seguir representa, do jeito certo,
-o principal gas utilizado pelas plantas no processo de fotossintese.
-
-  ( ) A) Oxigenio
-  ( ) B) Gas carbonico
-  ( ) C) Nitrogenio
-  ( ) D) Hidrogenio
+ESCREVA, com detalhes e levando em consideracao os fatores ambientais
+que podem influenciar a sua eficiencia,
+sobre o processo de fotossintese realizado pelas plantas verdes.
 ```
 
-> Note: mesma simplificação de vocabulário, mas SEM dicas extras (que poderiam
-> confundir um aluno com TEA) e mantendo a ordem original das questões para
-> preservar previsibilidade. Idiomatismos como "tendo em vista" são trocados
-> por "pensando em" (dicionário literal), o que se vê melhor na questão 3.
+> Tempo MUITO maior (23 min para uma única questão discursiva), e a frase
+> longa foi automaticamente quebrada em duas linhas em "eficiencia,".
 
-Veja os arquivos completos em [exemplos/saida_tdah.txt](exemplos/saida_tdah.txt) e [exemplos/saida_tea.txt](exemplos/saida_tea.txt).
+#### Saída — perfil **TDAH em grau 5 (extremo)**
+
+```
+QUESTAO 5 [DISCURSIVA] - dificuldade 5/5
+Tempo sugerido: 24 minutos
+
+EXPLIQUE de forma completa e detalhada as diferencas entre celulas
+eucariontes e celulas procariontes,
+citando exemplos concretos de cada tipo.
+```
+
+> No grau 3 essa questão NÃO quebrava (max=18). Em grau 5 (max=12), o
+> programa força a divisão em "procariontes," e o tempo sobe de 18 para
+> 24 min. Linguagem literal também é forçada, o que mudou Q3 de "levando em
+> consideração" para "pensando em".
 
 ---
 
@@ -322,15 +476,18 @@ Três passos:
        PERFIL_TEA,
        PERFIL_DOWN,
        PERFIL_DI_LEVE,
+       PERFIL_DISLEXIA,
        PERFIL_GENERICO,
-       PERFIL_DISLEXIA,   // <-- novo
+       PERFIL_TDI,        // <-- novo (ex: transtorno de processamento auditivo)
        PERFIL_TOTAL
    } TipoPerfil;
    ```
 2. Em [src/perfis.c](src/perfis.c), adicione uma entrada na tabela
-   `PERFIS[]` configurando as bandeiras desejadas.
+   `PERFIS[]` configurando as bandeiras desejadas (não esqueça
+   `.grau = GRAU_PADRAO`).
 3. Recompile. Pronto. O novo perfil aparece automaticamente no menu e em
-   `perfis_listar()` — não há mudança em `main.c`, no parser ou no exibidor.
+   `perfis_listar()`, e já recebe o sistema de graus (1–5) sem nenhuma
+   mudança em `main.c`, no parser, no adaptador ou no exibidor.
 
 Se a sua adaptação requer uma transformação inédita (ex.: substituir números
 por palavras), basta adicionar uma função no pipeline de `adaptar_prova()`

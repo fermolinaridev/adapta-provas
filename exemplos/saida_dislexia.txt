@@ -1,13 +1,18 @@
 ======================================================================
-TITULO: Prova de Ciencias - Capitulo 4 [adaptada para TEA (Autismo) - grau 3]
+TITULO: Prova de Ciencias - Capitulo 4 [adaptada para Dislexia - grau 3]
 DISCIPLINA: Biologia
-PERFIL DE ACESSIBILIDADE: TEA (Autismo) (grau 3 - moderado)
-  -> Transtorno do Espectro Autista - linguagem literal e estrutura previsivel
-TEMPO TOTAL SUGERIDO: cerca de 69 minutos
+PERFIL DE ACESSIBILIDADE: Dislexia (grau 3 - moderado)
+  -> Frases curtas, vocabulario simples e MUITO mais tempo de leitura
+TEMPO TOTAL SUGERIDO: cerca de 80 minutos
 ======================================================================
 
+DICAS GERAIS DE LEITURA:
+  - Leia cada questao com calma. Releia se precisar.
+  - Foque no que esta em CAIXA-ALTA: e o que deve ser feito.
+  - Voce pode pular uma questao e voltar nela depois.
+
 QUESTAO 1 [OBJETIVA] - dificuldade 2/5
-Tempo sugerido: 9 minutos
+Tempo sugerido: 11 minutos
 
 ENCONTRE qual das alternativas a seguir representa, do jeito certo, o principal gas utilizado pelas plantas no processo de fotossintese.
 
@@ -16,8 +21,10 @@ ENCONTRE qual das alternativas a seguir representa, do jeito certo, o principal 
   ( ) C) Nitrogenio
   ( ) D) Hidrogenio
 
+  >> DICA: identifique primeiro O QUE a questao pede (palavra em CAIXA-ALTA), depois responda.
+
 QUESTAO 2 [OBJETIVA] - dificuldade 3/5
-Tempo sugerido: 11 minutos
+Tempo sugerido: 12 minutos
 
 VEJA qual orgao do corpo humano e responsavel por bombear o sangue para todas as partes do corpo.
 
@@ -26,10 +33,13 @@ VEJA qual orgao do corpo humano e responsavel por bombear o sangue para todas as
   ( ) C) Coracao
   ( ) D) Figado
 
-QUESTAO 3 [DISCURSIVA] - dificuldade 4/5
-Tempo sugerido: 20 minutos
+  >> DICA: identifique primeiro O QUE a questao pede (palavra em CAIXA-ALTA), depois responda.
 
-ESCREVA, com detalhes e pensando em os fatores ambientais que podem influenciar a sua eficiencia, sobre o processo de fotossintese realizado pelas plantas verdes.
+QUESTAO 3 [DISCURSIVA] - dificuldade 4/5
+Tempo sugerido: 23 minutos
+
+ESCREVA, com detalhes e levando em consideracao os fatores ambientais que podem influenciar a sua eficiencia,
+sobre o processo de fotossintese realizado pelas plantas verdes.
 
 
 Resposta:
@@ -38,8 +48,10 @@ Resposta:
   ____________________________________________________
   ____________________________________________________
 
+  >> DICA: identifique primeiro O QUE a questao pede (palavra em CAIXA-ALTA), depois responda.
+
 QUESTAO 4 [OBJETIVA] - dificuldade 1/5
-Tempo sugerido: 8 minutos
+Tempo sugerido: 9 minutos
 
 MARQUE a alternativa que indica o nome do animal que vive na agua e respira por branquias.
 
@@ -48,8 +60,10 @@ MARQUE a alternativa que indica o nome do animal que vive na agua e respira por 
   ( ) C) Cavalo
   ( ) D) Passaro
 
+  >> DICA: identifique primeiro O QUE a questao pede (palavra em CAIXA-ALTA), depois responda.
+
 QUESTAO 5 [DISCURSIVA] - dificuldade 5/5
-Tempo sugerido: 21 minutos
+Tempo sugerido: 25 minutos
 
 EXPLIQUE de forma completa e detalhada as diferencas entre celulas eucariontes e celulas procariontes, citando exemplos concretos de cada tipo.
 
@@ -59,6 +73,8 @@ Resposta:
   ____________________________________________________
   ____________________________________________________
   ____________________________________________________
+
+  >> DICA: identifique primeiro O QUE a questao pede (palavra em CAIXA-ALTA), depois responda.
 
 ======================================================================
 FIM DA PROVA. ENTREGUE QUANDO TERMINAR. BOA SORTE!

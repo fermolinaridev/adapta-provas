@@ -205,6 +205,48 @@ int prova_carregar_arquivo(Prova *p, const char *caminho)
     return (p->num_questoes > 0 || p->titulo != NULL) ? 1 : 0;
 }
 
+int prova_salvar_arquivo_ini(const Prova *p, const char *caminho)
+{
+    if (p == NULL || caminho == NULL) {
+        return 0;
+    }
+    FILE *f = fopen(caminho, "w");
+    if (f == NULL) {
+        return 0;
+    }
+    fprintf(f, "# Prova gerada pelo AdaptaProvas (formato INI editavel).\n");
+    fprintf(f, "# Voce pode reabrir esta prova pelo menu (opcao 1).\n\n");
+
+    fprintf(f, "[PROVA]\n");
+    if (p->titulo != NULL) {
+        fprintf(f, "titulo=%s\n", p->titulo);
+    }
+    if (p->disciplina != NULL) {
+        fprintf(f, "disciplina=%s\n", p->disciplina);
+    }
+    fputc('\n', f);
+
+    for (int i = 0; i < p->num_questoes; i++) {
+        const Questao *q = &p->questoes[i];
+        fprintf(f, "[QUESTAO]\n");
+        fprintf(f, "numero=%d\n", q->numero);
+        fprintf(f, "tipo=%s\n", q->tipo == QUESTAO_DISCURSIVA ? "discursiva" : "objetiva");
+        if (q->dificuldade > 0) {
+            fprintf(f, "dificuldade=%d\n", q->dificuldade);
+        }
+        if (q->enunciado != NULL) {
+            fprintf(f, "enunciado=%s\n", q->enunciado);
+        }
+        for (int j = 0; j < q->num_alternativas; j++) {
+            fprintf(f, "%c=%s\n", q->alternativas[j].letra,
+                    q->alternativas[j].texto != NULL ? q->alternativas[j].texto : "");
+        }
+        fputc('\n', f);
+    }
+    fclose(f);
+    return 1;
+}
+
 void prova_exibir(const Prova *p, FILE *out)
 {
     if (p == NULL || out == NULL) {

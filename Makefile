@@ -44,9 +44,22 @@ run: $(BIN)
 clean:
 	rm -rf $(OBJ_DIR) $(BIN) adapta_provas adapta_provas.exe
 
-# Atalho: compila e gera as duas saidas adaptadas a partir do exemplo.
-# Usa redirecionamento via "echo" para automatizar o menu.
+# Atalho: compila e gera saidas adaptadas para varios perfis e graus a
+# partir do mesmo arquivo de exemplo. Cada bloco de linhas equivale a:
+#   2  -> escolher perfil
+#   N  -> indice do perfil (1=TDAH, 2=TEA, 3=Down, 4=DI, 5=Dislexia, 6=Generico)
+#   G  -> grau (1..5)
+#   5  -> exportar
+#   <caminho>
 exemplo: $(BIN)
-	@printf "1\nexemplos/prova_exemplo.txt\n2\n1\n5\nexemplos/saida_tdah.txt\n2\n2\n5\nexemplos/saida_tea.txt\n0\n" \
-	  | ./$(BIN) >/dev/null
-	@echo "Geradas: exemplos/saida_tdah.txt e exemplos/saida_tea.txt"
+	@printf "1\nexemplos/prova_exemplo.txt\n\
+2\n1\n3\n5\nexemplos/saida_tdah.txt\n\
+2\n2\n3\n5\nexemplos/saida_tea.txt\n\
+2\n5\n3\n5\nexemplos/saida_dislexia.txt\n\
+2\n1\n5\n5\nexemplos/saida_tdah_grau5.txt\n\
+0\n" | ./$(BIN) >/dev/null
+	@echo "Geradas em exemplos/:"
+	@echo "  - saida_tdah.txt        (TDAH grau 3)"
+	@echo "  - saida_tea.txt         (TEA grau 3)"
+	@echo "  - saida_dislexia.txt    (Dislexia grau 3)"
+	@echo "  - saida_tdah_grau5.txt  (TDAH grau 5 - extremo)"

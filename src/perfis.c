@@ -42,7 +42,10 @@
 #include <string.h>
 
 /* ============================================================
- * Tabela de perfis. Adicionar um novo perfil = nova linha aqui.
+ * Tabela de perfis. Os valores aqui representam o GRAU PADRAO (3 -
+ * moderado). A funcao perfis_compor() ajusta esses valores de acordo
+ * com o grau real escolhido pelo usuario (1 a 5).
+ * Adicionar um novo perfil = nova linha aqui + novo enum em perfis.h.
  * ============================================================ */
 static const Perfil PERFIS[PERFIL_TOTAL] = {
     {
@@ -61,6 +64,7 @@ static const Perfil PERFIS[PERFIL_TOTAL] = {
         .max_palavras_frase      = 18,
         .tempo_base_minutos      = 4,
         .fator_tempo_extra       = 1.50,
+        .grau                    = GRAU_PADRAO,
     },
     {
         .tipo                    = PERFIL_TEA,
@@ -78,6 +82,7 @@ static const Perfil PERFIS[PERFIL_TOTAL] = {
         .max_palavras_frase      = 22,
         .tempo_base_minutos      = 5,
         .fator_tempo_extra       = 1.50,
+        .grau                    = GRAU_PADRAO,
     },
     {
         .tipo                    = PERFIL_DOWN,
@@ -95,6 +100,7 @@ static const Perfil PERFIS[PERFIL_TOTAL] = {
         .max_palavras_frase      = 12,
         .tempo_base_minutos      = 6,
         .fator_tempo_extra       = 2.00,
+        .grau                    = GRAU_PADRAO,
     },
     {
         .tipo                    = PERFIL_DI_LEVE,
@@ -112,6 +118,25 @@ static const Perfil PERFIS[PERFIL_TOTAL] = {
         .max_palavras_frase      = 14,
         .tempo_base_minutos      = 5,
         .fator_tempo_extra       = 1.75,
+        .grau                    = GRAU_PADRAO,
+    },
+    {
+        .tipo                    = PERFIL_DISLEXIA,
+        .nome                    = "Dislexia",
+        .descricao               = "Frases curtas, vocabulario simples e MUITO mais tempo de leitura",
+        .simplificar_linguagem   = 1,
+        .linguagem_literal       = 0,
+        .dividir_frases_longas   = 1,
+        .destacar_verbos_acao    = 1, /* CAIXA-ALTA destaca o comando        */
+        .sugerir_tempo           = 1,
+        .ordenar_por_dificuldade = 0, /* manter ordem reduz reorientacao     */
+        .uma_questao_por_tela    = 0,
+        .reduzir_distracoes      = 1,
+        .adicionar_dicas         = 1,
+        .max_palavras_frase      = 15,
+        .tempo_base_minutos      = 5,
+        .fator_tempo_extra       = 1.75, /* tempo extra e fundamental       */
+        .grau                    = GRAU_PADRAO,
     },
     {
         .tipo                    = PERFIL_GENERICO,
@@ -129,6 +154,7 @@ static const Perfil PERFIS[PERFIL_TOTAL] = {
         .max_palavras_frase      = 20,
         .tempo_base_minutos      = 4,
         .fator_tempo_extra       = 1.25,
+        .grau                    = GRAU_PADRAO,
     },
 };
 
@@ -433,6 +459,95 @@ void perfis_listar(FILE *out)
     }
 }
 
+const char *perfis_descricao_grau(int grau)
+{
+    switch (grau) {
+        case 1:  return "leve";
+        case 2:  return "leve a moderado";
+        case 3:  return "moderado";
+        case 4:  return "moderado a severo";
+        case 5:  return "extremo / severo";
+        default: return "indefinido";
+    }
+}
+
+/* Ajusta um perfil base de acordo com o grau (1-5).
+ * O grau 3 e neutro (mantem os valores da tabela). Graus mais baixos
+ * suavizam adaptacoes (mais proximo da prova original); graus mais
+ * altos as intensificam (frases mais curtas, mais tempo, mais dicas).
+ *
+ * Esta funcao nao modifica a tabela estatica PERFIS; ela copia o
+ * conteudo para uma struct local e devolve por valor. */
+Perfil perfis_compor(const Perfil *base, int grau)
+{
+    Perfil out;
+    if (base == NULL) {
+        memset(&out, 0, sizeof(out));
+        out.grau = GRAU_PADRAO;
+        return out;
+    }
+
+    /* Copia integral e em seguida ajusta. */
+    out = *base;
+
+    /* Clamp do grau em [1, 5]. */
+    if (grau < GRAU_MIN) grau = GRAU_MIN;
+    if (grau > GRAU_MAX) grau = GRAU_MAX;
+    out.grau = grau;
+
+    switch (grau) {
+        case 1:
+            /* Adaptacao bem leve: so simplificar e destacar verbos.
+             * Mantemos o restante desligado para nao alterar demais
+             * a prova original. */
+            out.dividir_frases_longas   = 0;
+            out.uma_questao_por_tela    = 0;
+            out.ordenar_por_dificuldade = 0;
+            out.linguagem_literal       = 0;
+            out.adicionar_dicas         = 0;
+            out.max_palavras_frase += 10; /* praticamente nao quebra */
+            out.fator_tempo_extra -= 0.30;
+            break;
+
+        case 2:
+            /* Adaptacao moderada-baixa. */
+            out.uma_questao_por_tela = 0;
+            out.max_palavras_frase += 5;
+            out.fator_tempo_extra -= 0.15;
+            break;
+
+        case 3:
+            /* Sem alteracao - valores da tabela. */
+            break;
+
+        case 4:
+            /* Adaptacao mais agressiva. */
+            out.max_palavras_frase -= 3;
+            out.fator_tempo_extra += 0.25;
+            out.adicionar_dicas = 1;
+            break;
+
+        case 5:
+            /* Extremo: tudo ligado, frases minimas, tempo bem maior. */
+            out.simplificar_linguagem  = 1;
+            out.linguagem_literal      = 1;
+            out.dividir_frases_longas  = 1;
+            out.destacar_verbos_acao   = 1;
+            out.uma_questao_por_tela   = 1;
+            out.reduzir_distracoes     = 1;
+            out.adicionar_dicas        = 1;
+            out.max_palavras_frase -= 6;
+            out.fator_tempo_extra += 0.50;
+            break;
+    }
+
+    /* Limites sensatos. */
+    if (out.max_palavras_frase < 6) out.max_palavras_frase = 6;
+    if (out.fator_tempo_extra < 1.00) out.fator_tempo_extra = 1.00;
+
+    return out;
+}
+
 Prova *adaptar_prova(const Prova *original, const Perfil *perfil)
 {
     if (original == NULL || perfil == NULL) {
@@ -447,10 +562,11 @@ Prova *adaptar_prova(const Prova *original, const Perfil *perfil)
     /* Cabecalho da prova adaptada. */
     {
         const char *base_titulo = original->titulo != NULL ? original->titulo : "Prova";
-        size_t      tam         = strlen(base_titulo) + strlen(perfil->nome) + 64;
+        size_t      tam         = strlen(base_titulo) + strlen(perfil->nome) + 96;
         char       *titulo      = (char *)malloc(tam);
         if (titulo != NULL) {
-            snprintf(titulo, tam, "%s [adaptada para perfil: %s]", base_titulo, perfil->nome);
+            snprintf(titulo, tam, "%s [adaptada para %s - grau %d]", base_titulo,
+                     perfil->nome, perfil->grau);
             nova->titulo = titulo;
         }
     }
@@ -534,7 +650,8 @@ void prova_exibir_adaptada(const Prova *p, const Perfil *perfil, FILE *out)
     if (p->disciplina != NULL) {
         fprintf(out, "DISCIPLINA: %s\n", p->disciplina);
     }
-    fprintf(out, "PERFIL DE ACESSIBILIDADE: %s\n", perfil->nome);
+    fprintf(out, "PERFIL DE ACESSIBILIDADE: %s (grau %d - %s)\n", perfil->nome,
+            perfil->grau, perfis_descricao_grau(perfil->grau));
     fprintf(out, "  -> %s\n", perfil->descricao);
 
     if (perfil->sugerir_tempo) {
