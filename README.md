@@ -17,10 +17,44 @@ A prova pode ser fornecida de **três formas diferentes** (vide menu):
 > Projeto educacional, sem dependências externas além da biblioteca padrão de
 > C. Compila com `gcc` (Linux, macOS, Windows/MinGW).
 
+### 🌐 Front-end web (porte JS)
+
+Além da CLI em C, o projeto também conta com um **front-end web** em vanilla
+JavaScript que roda 100% no navegador (`web/index.html`) — basta abrir o
+arquivo: nada é enviado para servidores, toda a adaptação acontece localmente.
+A lógica de perfis, parser e pipeline de transformação foi portada fielmente
+de `src/perfis.c` para `web/js/`. Tem tema claro/escuro, dropzone para upload
+de `.txt`, comparação lado a lado e exportação direta.
+
+```
+web/
+├── index.html
+├── styles.css
+└── js/
+    ├── perfis.js     ← porte de perfis.c (definição + composição por grau)
+    ├── adaptador.js  ← pipeline de transformações + renderização
+    ├── parser.js     ← detector de questões em texto livre + INI
+    ├── exemplos.js   ← provas de exemplo embutidas
+    └── app.js        ← UI / orquestração
+```
+
+### ⚡ Início rápido no Windows (zero configuração)
+
+**Duplo clique em `start.bat`** — o script `setup.ps1` cuida de tudo:
+
+1. Detecta se o `gcc` está instalado
+2. Se não estiver, baixa e instala o **MinGW-W64** via `winget` automaticamente
+3. Compila o projeto (só na primeira vez, ou quando os fontes mudarem)
+4. Abre o aplicativo
+
+Não precisa instalar nada manualmente. Basta ter Windows 10/11 com `winget`
+(já incluso por padrão no Windows 11 e em atualizações recentes do Windows 10).
+
 ---
 
 ## Sumário
 
+- [Início rápido (Windows)](#-início-rápido-no-windows-zero-configuração)
 - [Como compilar](#como-compilar)
 - [Como usar](#como-usar)
 - [Formato do arquivo de entrada](#formato-do-arquivo-de-entrada)

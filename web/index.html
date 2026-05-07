@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AdaptaProvas - Adapte provas escolares automaticamente para alunos com TDAH, TEA, Síndrome de Down, Dislexia e mais.">
+    <title>AdaptaProvas — Acessibilidade em provas escolares</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ====================== HEADER ====================== -->
+<header class="site-header">
+    <div class="container header-inner">
+        <div class="brand">
+            <div class="brand-logo" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2v4"/>
+                    <path d="M12 18v4"/>
+                    <path d="m4.93 4.93 2.83 2.83"/>
+                    <path d="m16.24 16.24 2.83 2.83"/>
+                    <path d="M2 12h4"/>
+                    <path d="M18 12h4"/>
+                    <path d="m4.93 19.07 2.83-2.83"/>
+                    <path d="m16.24 7.76 2.83-2.83"/>
+                </svg>
+            </div>
+            <div class="brand-text">
+                <h1>AdaptaProvas</h1>
+                <span class="brand-tag">Acessibilidade automática para provas escolares</span>
+            </div>
+        </div>
+        <nav class="header-nav">
+            <button id="btn-tema" class="btn-icone" aria-label="Alternar tema claro/escuro" title="Alternar tema">
+                <svg class="icon-sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="4"/>
+                    <path d="M12 2v2"/><path d="M12 20v2"/>
+                    <path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/>
+                    <path d="M2 12h2"/><path d="M20 12h2"/>
+                    <path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+                </svg>
+                <svg class="icon-lua" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+            </button>
+            <a class="header-link" href="https://github.com/fernandomunhozmolinari/adapta-provas" target="_blank" rel="noopener" aria-label="Ver código no GitHub">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2.01c-3.2.69-3.87-1.54-3.87-1.54-.52-1.33-1.27-1.68-1.27-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.69 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18.92-.26 1.91-.39 2.89-.39.98 0 1.97.13 2.89.39 2.21-1.49 3.18-1.18 3.18-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.07.78 2.16v3.21c0 .31.2.68.8.56 4.57-1.52 7.85-5.83 7.85-10.91C23.5 5.65 18.35.5 12 .5z"/>
+                </svg>
+                <span>GitHub</span>
+            </a>
+        </nav>
+    </div>
+</header>
+
+<!-- ====================== HERO ====================== -->
+<section class="hero">
+    <div class="container hero-inner">
+        <div class="hero-text">
+            <span class="hero-badge">✨ Inclusão na sala de aula</span>
+            <h2 class="hero-titulo">
+                Adapte qualquer prova em <span class="grad-text">segundos</span> para alunos com necessidades especiais.
+            </h2>
+            <p class="hero-sub">
+                Cole a prova, escolha o perfil de acessibilidade e o grau de adaptação.
+                Nós simplificamos o vocabulário, reorganizamos as questões, sugerimos tempo
+                e criamos um material respeitoso e respiravel para o estudante.
+            </p>
+            <div class="hero-stats">
+                <div class="stat"><strong>6</strong><span>perfis prontos</span></div>
+                <div class="stat"><strong>5</strong><span>graus de intensidade</span></div>
+                <div class="stat"><strong>100%</strong><span>offline & privado</span></div>
+            </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+            <div class="card-flutuante card-1">
+                <div class="card-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+                <div class="card-body">
+                    <div class="linha"></div>
+                    <div class="linha curta"></div>
+                    <div class="linha"></div>
+                    <div class="linha media"></div>
+                </div>
+            </div>
+            <div class="card-flutuante card-2">
+                <div class="card-perfil">
+                    <span class="emoji">🧠</span>
+                    <div>
+                        <strong>TDAH</strong>
+                        <small>Grau 3 — moderado</small>
+                    </div>
+                </div>
+                <div class="barra-progresso"><div class="preenchimento"></div></div>
+            </div>
+            <div class="card-flutuante card-3">
+                <strong>QUESTÃO 1</strong>
+                <small>Tempo: 11 min</small>
+                <div class="check"><span></span> Alternativa A</div>
+                <div class="check"><span></span> Alternativa B</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ====================== APP PRINCIPAL ====================== -->
+<main class="container main-app">
+
+    <!-- ETAPA 1: ENTRADA -->
+    <section class="painel" id="painel-entrada">
+        <header class="painel-header">
+            <div class="passo">1</div>
+            <div>
+                <h3>Entre com a prova</h3>
+                <p>Escolha como prefere fornecer a prova original.</p>
+            </div>
+        </header>
+
+        <div class="abas" role="tablist">
+            <button class="aba ativa" data-aba="colar" role="tab" aria-selected="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>
+                Colar texto
+            </button>
+            <button class="aba" data-aba="arquivo" role="tab" aria-selected="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Carregar .txt
+            </button>
+            <button class="aba" data-aba="exemplo" role="tab" aria-selected="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+                Usar exemplo
+            </button>
+        </div>
+
+        <div class="aba-painel ativa" data-painel="colar">
+            <div class="form-grupo">
+                <label for="campo-titulo">Título da prova <span class="opc">(opcional)</span></label>
+                <input id="campo-titulo" type="text" placeholder="Ex.: Prova de Ciências — 7º ano">
+            </div>
+            <div class="form-grupo">
+                <label for="campo-disciplina">Disciplina <span class="opc">(opcional)</span></label>
+                <input id="campo-disciplina" type="text" placeholder="Ex.: Biologia">
+            </div>
+            <div class="form-grupo">
+                <label for="campo-prova">Cole o texto da prova
+                    <span class="opc">— suporta numeração <code>1.</code> <code>2)</code> <code>Q3)</code> <code>Questão 4:</code> e alternativas <code>a)</code> <code>(B)</code> <code>C.</code></span>
+                </label>
+                <textarea id="campo-prova" rows="14" placeholder="1. Qual é o principal gás utilizado pelas plantas na fotossíntese?
+a) Oxigênio
+b) Gás carbônico
+c) Nitrogênio
+d) Hidrogênio
+
+2. Disserte sobre o processo de fotossíntese..."></textarea>
+            </div>
+            <div class="painel-acoes">
+                <button id="btn-processar-colar" class="btn btn-primario">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Processar prova
+                </button>
+                <button id="btn-limpar" class="btn btn-secundario">Limpar</button>
+            </div>
+        </div>
+
+        <div class="aba-painel" data-painel="arquivo">
+            <div class="dropzone" id="dropzone">
+                <input type="file" id="campo-arquivo" accept=".txt" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <strong>Arraste um arquivo .txt aqui</strong>
+                <small>ou clique para selecionar — formato INI do AdaptaProvas ou texto livre</small>
+            </div>
+        </div>
+
+        <div class="aba-painel" data-painel="exemplo">
+            <div class="exemplos-grid">
+                <button class="exemplo-card" data-exemplo="ciencias">
+                    <span class="exemplo-emoji">🧬</span>
+                    <strong>Ciências — Cap. 4</strong>
+                    <small>5 questões · Biologia básica</small>
+                </button>
+                <button class="exemplo-card" data-exemplo="historia">
+                    <span class="exemplo-emoji">🏛️</span>
+                    <strong>História — Rev. Francesa</strong>
+                    <small>4 questões · Texto longo</small>
+                </button>
+                <button class="exemplo-card" data-exemplo="matematica">
+                    <span class="exemplo-emoji">🧮</span>
+                    <strong>Matemática — Frações</strong>
+                    <small>6 questões · Cálculo simples</small>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ETAPA 2: PERFIL -->
+    <section class="painel" id="painel-perfil">
+        <header class="painel-header">
+            <div class="passo">2</div>
+            <div>
+                <h3>Escolha o perfil de acessibilidade</h3>
+                <p>Cada perfil tem regras específicas — você ainda controla a intensidade.</p>
+            </div>
+        </header>
+
+        <div class="perfis-grid" id="perfis-grid">
+            <!-- Cards inseridos via JS -->
+        </div>
+
+        <div class="grau-painel">
+            <div class="grau-info">
+                <div>
+                    <h4>Grau de adaptação</h4>
+                    <p>Define o quanto o perfil é "agressivo". <strong>3 (moderado)</strong> é o padrão.</p>
+                </div>
+                <div class="grau-valor">
+                    <span id="grau-numero">3</span>
+                    <small id="grau-label">moderado</small>
+                </div>
+            </div>
+            <input type="range" id="grau-slider" min="1" max="5" value="3" step="1" class="slider">
+            <div class="grau-marcadores">
+                <span data-g="1">1<br><small>leve</small></span>
+                <span data-g="2">2<br><small>leve+</small></span>
+                <span data-g="3">3<br><small>moderado</small></span>
+                <span data-g="4">4<br><small>severo</small></span>
+                <span data-g="5">5<br><small>extremo</small></span>
+            </div>
+        </div>
+
+        <!-- ===== Painel de IA ===== -->
+        <div class="ia-painel">
+            <div class="ia-header">
+                <label class="switch">
+                    <input type="checkbox" id="ia-toggle">
+                    <span class="switch-slider"></span>
+                </label>
+                <div class="ia-titulo">
+                    <h4>🤖 Reescrever questões com IA</h4>
+                    <p>A IA <strong>interpreta</strong> cada questão e a <strong>reescreve</strong> de verdade para o perfil do aluno (não só troca palavras).</p>
+                </div>
+                <button id="ia-config-btn" class="btn-icone" title="Configurações de IA" aria-label="Configurações de IA">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                </button>
+            </div>
+
+            <div class="ia-config oculto" id="ia-config">
+                <div class="form-grupo">
+                    <label for="ia-provedor">Provedor de IA</label>
+                    <select id="ia-provedor" class="select-custom">
+                        <option value="pollinations">🆓 Pollinations (grátis, sem chave necessária)</option>
+                        <option value="gemini">⭐ Google Gemini (grátis, requer chave)</option>
+                        <option value="groq">⚡ Groq Llama 3.3 (grátis, requer chave)</option>
+                        <option value="openai">💎 OpenAI GPT-4o-mini (pago)</option>
+                        <option value="openrouter">🌐 OpenRouter (livre escolha)</option>
+                    </select>
+                </div>
+                <div class="form-grupo ia-chave-grupo oculto">
+                    <label for="ia-chave">Chave de API <span class="opc">— salva apenas no seu navegador</span></label>
+                    <input id="ia-chave" type="password" placeholder="sk-... ou sua chave do provedor escolhido" autocomplete="off">
+                    <small class="ia-info">
+                        🔒 Sua chave fica armazenada localmente (localStorage) no seu navegador. Nunca é enviada para nenhum servidor além do provedor escolhido.
+                    </small>
+                </div>
+                <div class="form-grupo ia-modelo-grupo oculto">
+                    <label for="ia-modelo">Modelo <span class="opc">(opcional, deixe vazio para padrão)</span></label>
+                    <input id="ia-modelo" type="text" placeholder="ex: gpt-4o-mini, llama-3.3-70b-versatile">
+                </div>
+                <div class="ia-links">
+                    <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">→ Pegar chave gratuita do Gemini</a>
+                    <a href="https://console.groq.com/keys" target="_blank" rel="noopener">→ Pegar chave gratuita do Groq</a>
+                    <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">→ Pegar chave do OpenRouter</a>
+                </div>
+                <div class="ia-teste">
+                    <button id="ia-testar-btn" class="btn btn-secundario">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        Testar conexão com IA
+                    </button>
+                    <span id="ia-teste-resultado" class="ia-teste-resultado"></span>
+                </div>
+            </div>
+        </div>
+        <!-- ===== Fim painel de IA ===== -->
+
+        <div class="painel-acoes">
+            <button id="btn-adaptar" class="btn btn-primario btn-grande" disabled>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                Adaptar prova
+            </button>
+        </div>
+
+        <!-- Barra de progresso da IA -->
+        <div class="ia-progresso oculto" id="ia-progresso">
+            <div class="ia-progresso-info">
+                <span id="ia-progresso-texto">Reescrevendo com IA...</span>
+                <span id="ia-progresso-num">0/0</span>
+            </div>
+            <div class="ia-progresso-barra">
+                <div class="ia-progresso-preenchimento" id="ia-progresso-fill"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ETAPA 3: SAIDA -->
+    <section class="painel painel-saida oculto" id="painel-saida">
+        <header class="painel-header">
+            <div class="passo">3</div>
+            <div>
+                <h3>Resultado</h3>
+                <p>Compare a prova original com a versão adaptada.</p>
+            </div>
+        </header>
+
+        <div class="abas-saida">
+            <button class="aba-saida ativa" data-saida="adaptada">
+                <span class="ponto-vivo"></span>
+                Prova adaptada
+            </button>
+            <button class="aba-saida" data-saida="original">Prova original</button>
+            <button class="aba-saida" data-saida="lado-lado">Lado a lado</button>
+        </div>
+
+        <div class="painel-acoes painel-acoes-saida">
+            <button id="btn-baixar" class="btn btn-primario">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Baixar .txt
+            </button>
+            <button id="btn-imprimir" class="btn btn-secundario">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                Imprimir
+            </button>
+            <button id="btn-copiar" class="btn btn-secundario">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Copiar
+            </button>
+        </div>
+
+        <div class="saida-conteudo">
+            <pre class="saida-pre ativa" id="saida-adaptada"></pre>
+            <pre class="saida-pre" id="saida-original"></pre>
+            <div class="saida-lado-lado" id="saida-lado-lado">
+                <div><h5>Original</h5><pre id="saida-original-2"></pre></div>
+                <div><h5>Adaptada</h5><pre id="saida-adaptada-2"></pre></div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- ====================== TOAST ====================== -->
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<!-- ====================== FOOTER ====================== -->
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <div>
+            <strong>AdaptaProvas</strong>
+            <p>Trabalho universitário em C99 + porte web em vanilla JS. Toda a adaptação acontece no seu navegador — nada é enviado para servidores.</p>
+        </div>
+        <div class="footer-links">
+            <a href="https://github.com/fernandomunhozmolinari/adapta-provas" target="_blank" rel="noopener">Código-fonte</a>
+            <a href="https://github.com/fernandomunhozmolinari/adapta-provas/blob/main/README.md" target="_blank" rel="noopener">Documentação</a>
+        </div>
+    </div>
+</footer>
+
+<!-- ====================== SCRIPTS ====================== -->
+<script src="js/perfis.js?v=3"></script>
+<script src="js/parser.js?v=3"></script>
+<script src="js/adaptador.js?v=3"></script>
+<script src="js/ia.js?v=3"></script>
+<script src="js/exemplos.js?v=3"></script>
+<script src="js/app.js?v=3"></script>
+</body>
+</html>
