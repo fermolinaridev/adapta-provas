@@ -1,0 +1,35 @@
+# =============================================================================
+#  .gitignore -- AdaptaProvas
+# =============================================================================
+
+# --- Artefatos de compilacao C ---
+build/
+*.o
+*.obj
+*.exe
+*.out
+adapta_provas
+adapta_provas.exe
+
+# --- Arquivos temporarios de teste ---
+demo_input*.txt
+test_input*.txt
+
+# --- Sistema operacional ---
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# --- Editores ---
+*.swp
+*.swo
+*~
+.idea/
+
+# --- Logs e cache ---
+*.log
+*.tmp
+
+# --- Python (do servidor.py) ---
+__pycache__/
+*.pyc
