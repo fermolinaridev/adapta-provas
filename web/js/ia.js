@@ -119,13 +119,22 @@ const CONFIG_KEY = "adaptaprovas-ia-config";
 function obterConfigIA() {
     try {
         const raw = localStorage.getItem(CONFIG_KEY);
-        if (raw) return JSON.parse(raw);
+        if (raw) {
+            const c = JSON.parse(raw);
+            // Migracao: pollinations deixou de ser confiavel; migra para groq se for o padrao
+            if (c.provedor === "pollinations" && !c._migrado_v5) {
+                c.provedor = "groq";
+                c._migrado_v5 = true;
+            }
+            return c;
+        }
     } catch {}
     return {
         ativo: false,
-        provedor: "pollinations",
+        provedor: "groq",
         chave: "",
         modelo: "",
+        _migrado_v5: true,
     };
 }
 
@@ -158,8 +167,9 @@ Sua tarefa: receber um enunciado de questão escolar e devolvê-lo adaptado segu
 }
 
 /* Chamada para Pollinations.ai (gratis, sem chave).
- * Usa o endpoint OpenAI-compatible (/openai) que retorna o formato padrao
- * com choices[0].message.content. O endpoint legado / esta deprecando. */
+ * Quando rodando em localhost, usa o PROXY local (servidor.py) para evitar
+ * que a Pollinations detecte o request como vindo de navegador e retorne
+ * apenas o aviso de deprecacao. Em outros contextos, chama direto. */
 async function chamarPollinations(promptSistema, textoUsuario) {
     const body = {
         model: "openai",
@@ -169,10 +179,18 @@ async function chamarPollinations(promptSistema, textoUsuario) {
         ],
         temperature: 0.5,
     };
-    console.log("[Pollinations] Enviando:", body);
+
+    // Detecta se estamos rodando atraves do servidor local (com proxy)
+    const isLocalhost = location.hostname === "localhost" ||
+                        location.hostname === "127.0.0.1";
+    const endpoint = isLocalhost
+        ? "/api/pollinations"
+        : "https://text.pollinations.ai/openai";
+
+    console.log(`[Pollinations] Endpoint: ${endpoint} | Body:`, body);
     let resp;
     try {
-        resp = await fetch("https://text.pollinations.ai/openai", {
+        resp = await fetch(endpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body),
@@ -192,13 +210,44 @@ async function chamarPollinations(promptSistema, textoUsuario) {
         throw new Error(`Pollinations retornou resposta vazia: ${JSON.stringify(data).slice(0, 200)}`);
     }
 
-    /* Detecta se a resposta e na verdade um aviso de deprecacao do servico. */
+    /* Detecta avisos / anuncios injetados pela Pollinations no lugar do conteudo. */
     const lower = conteudo.toLowerCase();
-    if (lower.includes("legacy text api is being deprecat") ||
-        lower.includes("please migrate to our new service")) {
+    const padroesIndesejaveis = [
+        "legacy text api is being deprecat",
+        "please migrate to our new service",
+        "powered by pollinations.ai",
+        "support pollinations",
+        "support our mission",
+        "🌸",
+        "**ad**",
+        "[ad]",
+        "pollinations.ai/redirect",
+    ];
+    const ehAnuncio = padroesIndesejaveis.some(p => lower.includes(p.toLowerCase()));
+
+    if (ehAnuncio) {
+        /* Tenta extrair conteudo real removendo o bloco de anuncio. */
+        let limpo = conteudo
+            // Remove sec~oes "Support Pollinations:" ate o fim
+            .replace(/---\s*\n?\*\*Support Pollinations[\s\S]*/i, "")
+            // Remove blocos com 🌸 ... 🌸
+            .replace(/🌸[\s\S]*?🌸[\s\S]*/g, "")
+            // Remove linhas "Powered by..."
+            .replace(/Powered by Pollinations\.AI[\s\S]*/i, "")
+            // Remove linhas com **Ad**
+            .replace(/\*\*Ad\*\*[\s\S]*/g, "")
+            .trim();
+        // Remove --- ou ___ no fim
+        limpo = limpo.replace(/[-_]{3,}\s*$/g, "").trim();
+
+        if (limpo && limpo.length > 20) {
+            console.warn("[Pollinations] Anuncio removido. Conteudo limpo:", limpo.substring(0, 200));
+            return limpo;
+        }
+
         throw new Error(
-            "Pollinations retornou aviso de deprecação em vez de gerar conteúdo. " +
-            "Recomendamos usar Gemini (gratuito): pegue uma chave em https://aistudio.google.com/app/apikey"
+            "Pollinations está retornando apenas anúncios em vez de respostas reais para usuários gratuitos. " +
+            "Recomendamos trocar para o Groq (gratuito, rápido): pegue uma chave em https://console.groq.com/keys"
         );
     }
 
@@ -248,6 +297,7 @@ async function chamarGemini(chave, modelo, promptSistema, textoUsuario) {
         contents: [{ role: "user", parts: [{ text: textoUsuario }] }],
         generationConfig: { temperature: 0.4, maxOutputTokens: 800 },
     };
+    console.log(`[Gemini] Modelo: ${m}`);
     const resp = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -255,19 +305,68 @@ async function chamarGemini(chave, modelo, promptSistema, textoUsuario) {
     });
     if (!resp.ok) {
         const errBody = await resp.text();
+
+        // Tratamento especifico para erro de cota (429)
+        if (resp.status === 429) {
+            throw new Error(
+                `Gemini: limite de uso gratuito atingido (15 req/min, 1500 req/dia). ` +
+                `Tente: (1) esperar 1 minuto, (2) trocar para o modelo "gemini-1.5-flash" no campo Modelo (tem limite maior), ` +
+                `ou (3) trocar de provedor para "Pollinations (grátis)".`
+            );
+        }
+        if (resp.status === 400) {
+            throw new Error(`Gemini: requisição inválida. Verifique se sua chave está correta. Detalhes: ${errBody.slice(0, 200)}`);
+        }
+        if (resp.status === 403) {
+            throw new Error(`Gemini: chave inválida ou sem permissão para o modelo "${m}". Pegue uma nova chave em https://aistudio.google.com/app/apikey`);
+        }
         throw new Error(`Gemini ${resp.status}: ${errBody.slice(0, 200)}`);
     }
     const data = await resp.json();
     const texto = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    if (!texto) {
+        // Pode ser bloqueio de safety filter
+        const finishReason = data.candidates?.[0]?.finishReason;
+        if (finishReason === "SAFETY") {
+            throw new Error(`Gemini bloqueou o conteúdo por filtro de segurança. Tente outro modelo ou provedor.`);
+        }
+        throw new Error(`Gemini retornou resposta vazia. finishReason: ${finishReason}`);
+    }
     return texto.trim();
 }
 
-/* Roteador: chama o provedor correto. */
-async function reescreverComIA(promptSistema, texto, config) {
+/* Funcao raw que escolhe o provedor (sem retry). */
+async function _chamarProvedor(promptSistema, texto, config) {
     const p = config.provedor || "pollinations";
     if (p === "pollinations") return await chamarPollinations(promptSistema, texto);
     if (p === "gemini") return await chamarGemini(config.chave, config.modelo, promptSistema, texto);
     return await chamarOpenAICompat(p, config.chave, config.modelo, promptSistema, texto);
+}
+
+/* Roteador com RETRY automatico para erros de rate-limit (429).
+ * Espera com backoff exponencial (2s, 4s, 8s) antes de re-tentar. */
+async function reescreverComIA(promptSistema, texto, config) {
+    const maxTentativas = 3;
+    let ultimoErro = null;
+
+    for (let tentativa = 1; tentativa <= maxTentativas; tentativa++) {
+        try {
+            return await _chamarProvedor(promptSistema, texto, config);
+        } catch (e) {
+            ultimoErro = e;
+            const msg = (e.message || "").toLowerCase();
+            const ehRateLimit = msg.includes("429") || msg.includes("limite de uso") || msg.includes("rate limit") || msg.includes("quota");
+
+            if (!ehRateLimit || tentativa === maxTentativas) {
+                throw e;
+            }
+
+            const espera = Math.pow(2, tentativa) * 1000; // 2s, 4s
+            console.warn(`[IA] Rate limit (tentativa ${tentativa}/${maxTentativas}). Aguardando ${espera/1000}s antes de tentar de novo...`);
+            await new Promise(r => setTimeout(r, espera));
+        }
+    }
+    throw ultimoErro;
 }
 
 /* =================== TESTE DE CONEXAO =================== */

@@ -7,7 +7,8 @@
       "PowerShell($total = 0; @\\('src\\\\main.c','src\\\\perfis.c','src\\\\prova.c','src\\\\utils.c','include\\\\perfis.h','include\\\\prova.h','include\\\\utils.h'\\) | ForEach-Object { $n = \\(Get-Content $_\\).Count; Write-Output \"$_ : $n linhas\"; $total += $n }; Write-Output \"------\"; Write-Output \"TOTAL: $total linhas\")",
       "mcp__Claude_in_Chrome__tabs_context_mcp",
       "PowerShell(cd \"C:\\\\Users\\\\Fernando\\\\Documents\\\\GitHub\\\\adapta-provas\"; $proc = Start-Process powershell.exe -ArgumentList \"-NoProfile -ExecutionPolicy Bypass -File `\"$PWD\\\\setup.ps1`\"\" -Wait -PassThru -NoNewWindow; Write-Output \"Exit code: $\\($proc.ExitCode\\)\")",
-      "PowerShell(cd \"C:\\\\Users\\\\Fernando\\\\Documents\\\\GitHub\\\\adapta-provas\"; powershell.exe -NoProfile -ExecutionPolicy Bypass -File \".\\\\setup.ps1\")"
+      "PowerShell(cd \"C:\\\\Users\\\\Fernando\\\\Documents\\\\GitHub\\\\adapta-provas\"; powershell.exe -NoProfile -ExecutionPolicy Bypass -File \".\\\\setup.ps1\")",
+      "Bash(git add *)"
     ]
   }
 }

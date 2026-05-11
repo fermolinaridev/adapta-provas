@@ -248,11 +248,11 @@ d) Hidrogênio
                 <div class="form-grupo">
                     <label for="ia-provedor">Provedor de IA</label>
                     <select id="ia-provedor" class="select-custom">
-                        <option value="pollinations">🆓 Pollinations (grátis, sem chave necessária)</option>
-                        <option value="gemini">⭐ Google Gemini (grátis, requer chave)</option>
-                        <option value="groq">⚡ Groq Llama 3.3 (grátis, requer chave)</option>
+                        <option value="groq">⚡ Groq Llama 3.3 (grátis e rápido — RECOMENDADO)</option>
+                        <option value="gemini">⭐ Google Gemini (grátis, ótima qualidade)</option>
+                        <option value="openrouter">🌐 OpenRouter (vários modelos)</option>
                         <option value="openai">💎 OpenAI GPT-4o-mini (pago)</option>
-                        <option value="openrouter">🌐 OpenRouter (livre escolha)</option>
+                        <option value="pollinations">⚠️ Pollinations (instável — pode retornar anúncios)</option>
                     </select>
                 </div>
                 <div class="form-grupo ia-chave-grupo oculto">
@@ -264,12 +264,25 @@ d) Hidrogênio
                 </div>
                 <div class="form-grupo ia-modelo-grupo oculto">
                     <label for="ia-modelo">Modelo <span class="opc">(opcional, deixe vazio para padrão)</span></label>
-                    <input id="ia-modelo" type="text" placeholder="ex: gpt-4o-mini, llama-3.3-70b-versatile">
+                    <input id="ia-modelo" type="text" placeholder="ex: gemini-1.5-flash (mais cota), gpt-4o-mini, llama-3.3-70b-versatile">
+                    <small class="ia-info">
+                        💡 <strong>Gemini:</strong> se der erro 429 (cota), troque para <code>gemini-1.5-flash</code> que tem limite mais alto (60 req/min na versão gratuita).
+                    </small>
+                </div>
+                <div class="ia-dica-card" id="ia-dica-card">
+                    <strong>💡 Como pegar a chave do Groq (30 segundos, grátis):</strong>
+                    <ol class="ia-passos">
+                        <li>Acesse <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a></li>
+                        <li>Faça login (Google/GitHub)</li>
+                        <li>Clique em <strong>"Create API Key"</strong></li>
+                        <li>Cole a chave (começa com <code>gsk_</code>) no campo acima</li>
+                    </ol>
+                    <small>O Groq tem 30 requisições/minuto grátis e é o mais rápido do mercado para Llama 3.3.</small>
                 </div>
                 <div class="ia-links">
-                    <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">→ Pegar chave gratuita do Gemini</a>
-                    <a href="https://console.groq.com/keys" target="_blank" rel="noopener">→ Pegar chave gratuita do Groq</a>
-                    <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">→ Pegar chave do OpenRouter</a>
+                    <a href="https://console.groq.com/keys" target="_blank" rel="noopener">→ Chave do Groq (grátis)</a>
+                    <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">→ Chave do Gemini (grátis)</a>
+                    <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">→ Chave do OpenRouter</a>
                 </div>
                 <div class="ia-teste">
                     <button id="ia-testar-btn" class="btn btn-secundario">
@@ -364,11 +377,11 @@ d) Hidrogênio
 </footer>
 
 <!-- ====================== SCRIPTS ====================== -->
-<script src="js/perfis.js?v=3"></script>
-<script src="js/parser.js?v=3"></script>
-<script src="js/adaptador.js?v=3"></script>
-<script src="js/ia.js?v=3"></script>
-<script src="js/exemplos.js?v=3"></script>
-<script src="js/app.js?v=3"></script>
+<script src="js/perfis.js?v=6"></script>
+<script src="js/parser.js?v=6"></script>
+<script src="js/adaptador.js?v=6"></script>
+<script src="js/ia.js?v=6"></script>
+<script src="js/exemplos.js?v=6"></script>
+<script src="js/app.js?v=6"></script>
 </body>
 </html>

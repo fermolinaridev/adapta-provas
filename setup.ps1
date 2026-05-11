@@ -203,10 +203,30 @@ try {
 if ($emUso) {
     Info "Servidor ja esta rodando na porta $Porta. Reabrindo no navegador..."
 } else {
-    # Tenta iniciar via Python (mais simples e disponivel)
+    # Tenta iniciar via Python (script proprio com proxy para Pollinations)
     $servidorIniciado = $false
-    if (Get-Command python -ErrorAction SilentlyContinue) {
-        Info "Iniciando servidor HTTP local com Python na porta $Porta..."
+    $servidorPy = Join-Path $ProjetoDir "servidor.py"
+
+    if ((Get-Command python -ErrorAction SilentlyContinue) -and (Test-Path $servidorPy)) {
+        Info "Iniciando servidor Python (com proxy para Pollinations) na porta $Porta..."
+        $procArgs = @{
+            FilePath     = "python"
+            ArgumentList = @("`"$servidorPy`"", "$Porta")
+            WorkingDirectory = $ProjetoDir
+            WindowStyle  = "Hidden"
+            PassThru     = $true
+        }
+        try {
+            $servidor = Start-Process @procArgs
+            Start-Sleep -Milliseconds 1000
+            $servidorIniciado = -not $servidor.HasExited
+            if ($servidorIniciado) {
+                Ok "Servidor Python com proxy ativo (IA Pollinations funcionando sem CORS)"
+            }
+        } catch {}
+    } elseif (Get-Command python -ErrorAction SilentlyContinue) {
+        # Fallback: python.exe sem o script proprio (sem proxy)
+        Info "servidor.py nao encontrado. Usando servidor Python basico (sem proxy)..."
         $procArgs = @{
             FilePath     = "python"
             ArgumentList = @("-m", "http.server", "$Porta", "--bind", "127.0.0.1")
@@ -219,6 +239,7 @@ if ($emUso) {
             Start-Sleep -Milliseconds 800
             $servidorIniciado = -not $servidor.HasExited
         } catch {}
+        Aviso "Pollinations pode falhar. Use Gemini (gratuito) se a IA nao funcionar."
     }
 
     if (-not $servidorIniciado) {

@@ -362,6 +362,15 @@
             const precisaChave = provedorAtual && provedorAtual.precisaChave;
             chaveGrupo.classList.toggle('oculto', !precisaChave);
             modeloGrupo.classList.toggle('oculto', !precisaChave);
+
+            // Mostra o card de dica do Groq apenas quando Groq estiver selecionado
+            // e ainda nao tiver chave preenchida
+            const dicaCard = $('#ia-dica-card');
+            if (dicaCard) {
+                const ehGroq = provedorSelect.value === 'groq';
+                const semChave = !chaveInput.value || chaveInput.value.trim() === '';
+                dicaCard.classList.toggle('oculto', !(ehGroq && semChave));
+            }
         }
 
         function salvar() {
@@ -385,7 +394,7 @@
             atualizarVisibilidade();
             salvar();
         });
-        chaveInput.addEventListener('input', salvar);
+        chaveInput.addEventListener('input', () => { salvar(); atualizarVisibilidade(); });
         modeloInput.addEventListener('input', salvar);
         configBtn.addEventListener('click', () => {
             toggle.checked = !toggle.checked;
