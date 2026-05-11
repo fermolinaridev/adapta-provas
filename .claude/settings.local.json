@@ -8,7 +8,12 @@
       "mcp__Claude_in_Chrome__tabs_context_mcp",
       "PowerShell(cd \"C:\\\\Users\\\\Fernando\\\\Documents\\\\GitHub\\\\adapta-provas\"; $proc = Start-Process powershell.exe -ArgumentList \"-NoProfile -ExecutionPolicy Bypass -File `\"$PWD\\\\setup.ps1`\"\" -Wait -PassThru -NoNewWindow; Write-Output \"Exit code: $\\($proc.ExitCode\\)\")",
       "PowerShell(cd \"C:\\\\Users\\\\Fernando\\\\Documents\\\\GitHub\\\\adapta-provas\"; powershell.exe -NoProfile -ExecutionPolicy Bypass -File \".\\\\setup.ps1\")",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit -m 'feat: adiciona camada de IA para reescrita semantica de questoes *)",
+      "Bash(git push *)",
+      "Bash(git rm *)",
+      "Bash(git commit -m 'chore: limpeza de arquivos nao utilizados e adicao de .gitignore *)",
+      "Bash(git commit -m 'chore: atualiza permissoes locais do Claude Code *)"
     ]
   }
 }
